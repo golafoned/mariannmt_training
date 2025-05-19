@@ -7,7 +7,7 @@ SRC=en
 TRG=uk
 
 # number of merge operations
-bpe_operations=32000
+bpe_operations=8000
 
 # path to moses decoder: https://github.com/moses-smt/mosesdecoder
 mosesdecoder=../tools/moses-scripts
