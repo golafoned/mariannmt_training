@@ -43,12 +43,14 @@ mkdir -p model
 # preprocess data
 if [ ! -e "data/corpus.bpe.en" ]
 then
-    LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt13 -l en-de --echo src > data/valid.en
-    LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt13 -l en-de --echo ref > data/valid.uk
+    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt22 -l en-uk --echo src > data/valid_wmt22.en
+    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt22 -l en-uk --echo ref > data/valid_wmt22.uk
 
-    LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt14 -l en-de --echo src > data/test2014.en
-    LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt15 -l en-de --echo src > data/test2015.en
-    LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt16 -l en-de --echo src > data/test2016.en
+
+    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt22 -l en-uk --echo src > data/test2022.en
+    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt23 -l en-uk --echo src > data/test2023.en
+    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt24 -l en-uk --echo src > data/test2024.en
+
 
     ./scripts/preprocess-data.sh
 fi
@@ -104,6 +106,6 @@ do
 done
 
 # calculate bleu scores on test sets
-LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt14 -l en-de < data/test2014.uk.output
-LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt15 -l en-de < data/test2015.uk.output
-LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt16 -l en-de < data/test2016.uk.output
+    LLC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt22 -l en-uk < data/test2022.uk.output
+    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt23 -l en-uk < data/test2023.uk.output
+    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt24 -l en-uk < data/test2024.uk.output
