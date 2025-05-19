@@ -106,6 +106,6 @@ do
 done
 
 # calculate bleu scores on test sets
-    LLC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt22 -l en-uk < data/test2022.uk.output
-    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt23 -l en-uk < data/test2023.uk.output
-    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt24 -l en-uk < data/test2024.uk.output
+LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt14 -l en-de < data/test2014.uk.output
+LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt15 -l en-de < data/test2015.uk.output
+LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt16 -l en-de < data/test2016.uk.output
