@@ -56,7 +56,7 @@ fi
 # create common vocabulary
 if [ ! -e "model/vocab.ende.yml" ]
 then
-    cat data/corpus.bpe.en data/corpus.bpe.de | $MARIAN_VOCAB --max-size 36000 > model/vocab.ende.yml
+    cat data/corpus.bpe.en data/corpus.bpe.de | $MARIAN_VOCAB --max-size 18000 > model/vocab.ende.yml
 fi
 
 # train model
@@ -67,7 +67,7 @@ then
         --train-sets data/corpus.bpe.en data/corpus.bpe.de \
         --max-length 100 \
         --vocabs model/vocab.ende.yml model/vocab.ende.yml \
-        --mini-batch-fit -w 10000 --maxi-batch 1000 \
+        --mini-batch-fit -w 6000 --maxi-batch 1000 \
         --early-stopping 10 --cost-type=ce-mean-words \
         --valid-freq 5000 --save-freq 5000 --disp-freq 500 \
         --valid-metrics ce-mean-words perplexity translation \

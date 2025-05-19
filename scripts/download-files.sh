@@ -14,8 +14,8 @@ tar -xf training-parallel-commoncrawl.tgz
 tar -xf training-parallel-nc-v12.tgz
 
 # create corpus files
-cat europarl-v7.de-en.de commoncrawl.de-en.de training/news-commentary-v12.de-en.de > corpus.de
-cat europarl-v7.de-en.en commoncrawl.de-en.en training/news-commentary-v12.de-en.en > corpus.en
+cat training/news-commentary-v12.de-en.de > corpus.de
+cat training/news-commentary-v12.de-en.en > corpus.en
 
 # clean
 rm -r europarl-* commoncrawl.* training/ *.tgz
