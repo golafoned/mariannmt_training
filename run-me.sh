@@ -56,7 +56,7 @@ fi
 # create common vocabulary
 if [ ! -e "model/vocab.enuk.yml" ]
 then
-    cat data/corpus.bpe.en data/corpus.bpe.de | $MARIAN_VOCAB --max-size 36000 > model/vocab.enuk.yml
+    cat data/corpus.bpe.en data/corpus.bpe.uk | $MARIAN_VOCAB --max-size 36000 > model/vocab.enuk.yml
 fi
 
 # train model
