@@ -4,7 +4,7 @@
 SRC=en
 
 # suffix of target language files
-TRG=de
+TRG=uk
 
 # number of merge operations
 bpe_operations=32000
