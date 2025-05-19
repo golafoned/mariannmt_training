@@ -69,7 +69,7 @@ then
         --train-sets data/corpus.bpe.en data/corpus.bpe.uk \
         --max-length 100 \
         --vocabs model/vocab.enuk.yml model/vocab.enuk.yml \
-        --mini-batch-fit -w 6000 --maxi-batch 1000 \
+        --mini-batch-fit -w 20000 --maxi-batch 1000 \
         --early-stopping 10 --cost-type=ce-mean-words \
         --valid-freq 5000 --save-freq 5000 --disp-freq 500 \
         --valid-metrics ce-mean-words perplexity translation \
