@@ -3,19 +3,15 @@
 mkdir -p data
 cd data
 
-# get En-De training data for WMT17
-wget -nc http://www.statmt.org/europarl/v7/de-en.tgz
-wget -nc http://www.statmt.org/wmt13/training-parallel-commoncrawl.tgz
-wget -nc http://data.statmt.org/wmt17/translation-task/training-parallel-nc-v12.tgz
+# get En-Uk training data for WMT17
+wget -nc https://drive.usercontent.google.com/download?id=1pS5pM0H8n4383saEuf-3yQtOquu5Uawj&export=download&confirm=t
 
 # extract data
-tar -xf de-en.tgz
-tar -xf training-parallel-commoncrawl.tgz
-tar -xf training-parallel-nc-v12.tgz
+tar -xf training.tgz
 
 # create corpus files
-cat training/news-commentary-v12.de-en.de > corpus.de
-cat training/news-commentary-v12.de-en.en > corpus.en
+cat training/corpus.uk-en.uk > corpus.uk
+cat training/corpus.uk-en.en > corpus.en
 
 # clean
 rm -r europarl-* commoncrawl.* training/ *.tgz

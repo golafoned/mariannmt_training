@@ -43,20 +43,25 @@ mkdir -p model
 # preprocess data
 if [ ! -e "data/corpus.bpe.en" ]
 then
-    LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt13 -l en-de --echo src > data/valid.en
-    LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt13 -l en-de --echo ref > data/valid.de
+    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt22 -l en-uk --echo src > data/valid_wmt22.en
+    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt22 -l en-uk --echo ref > data/valid_wmt22.uk
 
-    LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt14 -l en-de --echo src > data/test2014.en
-    LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt15 -l en-de --echo src > data/test2015.en
-    LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt16 -l en-de --echo src > data/test2016.en
+    # test sets for wmt22
+    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt22 -l en-uk --echo src > data/test2022.en
+
+    # test sets for wmt23
+    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt23 -l en-uk --echo src > data/test2023.en
+
+    # test sets for wmt24
+    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt24 -l en-uk --echo src > data/test2024.en
 
     ./scripts/preprocess-data.sh
 fi
 
 # create common vocabulary
-if [ ! -e "model/vocab.ende.yml" ]
+if [ ! -e "model/vocab.enuk.yml" ]
 then
-    cat data/corpus.bpe.en data/corpus.bpe.de | $MARIAN_VOCAB --max-size 18000 > model/vocab.ende.yml
+    cat data/corpus.bpe.en data/corpus.bpe.uk | $MARIAN_VOCAB --max-size 36000 > model/vocab.enuk.yml
 fi
 
 # train model
@@ -64,14 +69,14 @@ if [ ! -e "model/model.npz" ]
 then
     $MARIAN_TRAIN \
         --model model/model.npz --type transformer \
-        --train-sets data/corpus.bpe.en data/corpus.bpe.de \
+        --train-sets data/corpus.bpe.en data/corpus.bpe.uk \
         --max-length 100 \
-        --vocabs model/vocab.ende.yml model/vocab.ende.yml \
+        --vocabs model/vocab.enuk.yml model/vocab.enuk.yml \
         --mini-batch-fit -w 6000 --maxi-batch 1000 \
         --early-stopping 10 --cost-type=ce-mean-words \
         --valid-freq 5000 --save-freq 5000 --disp-freq 500 \
         --valid-metrics ce-mean-words perplexity translation \
-        --valid-sets data/valid.bpe.en data/valid.bpe.de \
+        --valid-sets data/valid.bpe.en data/valid.bpe.uk \
         --valid-script-path "bash ./scripts/validate.sh" \
         --valid-translation-output data/valid.bpe.en.output --quiet-translation \
         --valid-mini-batch 64 \
@@ -93,17 +98,17 @@ fi
 ITER=`cat model/valid.log | grep translation | sort -rg -k12,12 -t' ' | cut -f8 -d' ' | head -n1`
 
 # translate test sets
-for prefix in test2014 test2015 test2016
+for prefix in test2022 test2023 test2024
 do
     cat data/$prefix.bpe.en \
         | $MARIAN_DECODER -c model/model.npz.decoder.yml -m model/model.iter$ITER.npz -d $GPUS -b 12 -n -w 6000 \
         | sed 's/\@\@ //g' \
         | ../tools/moses-scripts/scripts/recaser/detruecase.perl \
-        | ../tools/moses-scripts/scripts/tokenizer/detokenizer.perl -l de \
-        > data/$prefix.de.output
+        | ../tools/moses-scripts/scripts/tokenizer/detokenizer.perl -l uk \
+        > data/$prefix.uk.output
 done
 
 # calculate bleu scores on test sets
-LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt14 -l en-de < data/test2014.de.output
-LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt15 -l en-de < data/test2015.de.output
-LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt16 -l en-de < data/test2016.de.output
+LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt22 -l en-uk < data/test2022.uk.output
+LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt23 -l en-uk < data/test2023.uk.output
+LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt24 -l en-uk < data/test2024.uk.output
