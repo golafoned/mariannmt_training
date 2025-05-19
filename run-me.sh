@@ -95,7 +95,7 @@ fi
 ITER=`cat model/valid.log | grep translation | sort -rg -k12,12 -t' ' | cut -f8 -d' ' | head -n1`
 
 # translate test sets
-for prefix in test2014 test2015 test2016
+for prefix in test2022 test2023 test2024
 do
     cat data/$prefix.bpe.en \
         | $MARIAN_DECODER -c model/model.npz.decoder.yml -m model/model.iter$ITER.npz -d $GPUS -b 12 -n -w 6000 \
@@ -106,6 +106,6 @@ do
 done
 
 # calculate bleu scores on test sets
-LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt14 -l en-de < data/test2014.uk.output
-LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt15 -l en-de < data/test2015.uk.output
-LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt16 -l en-de < data/test2016.uk.output
+LLC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt22 -l en-uk < data/test2022.uk.output
+LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt23 -l en-uk < data/test2023.uk.output
+LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt24 -l en-uk < data/test2024.uk.output
