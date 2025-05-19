@@ -44,7 +44,7 @@ mkdir -p model
 if [ ! -e "data/corpus.bpe.en" ]
 then
     LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt13 -l en-de --echo src > data/valid.en
-    LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt13 -l en-de --echo ref > data/valid.de
+    LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt13 -l en-de --echo ref > data/valid.uk
 
     LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt14 -l en-de --echo src > data/test2014.en
     LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt15 -l en-de --echo src > data/test2015.en
@@ -56,7 +56,7 @@ fi
 # create common vocabulary
 if [ ! -e "model/vocab.enuk.yml" ]
 then
-    cat data/corpus.bpe.en data/corpus.bpe.uk | $MARIAN_VOCAB --max-size 36000 > model/vocab.ende.yml
+    cat data/corpus.bpe.en data/corpus.bpe.uk | $MARIAN_VOCAB --max-size 36000 > model/vocab.enuk.yml
 fi
 
 # train model
@@ -66,7 +66,7 @@ then
         --model model/model.npz --type transformer \
         --train-sets data/corpus.bpe.en data/corpus.bpe.uk \
         --max-length 100 \
-        --vocabs model/vocab.ende.yml model/vocab.ende.yml \
+        --vocabs model/vocab.enuk.yml model/vocab.enuk.yml \
         --mini-batch-fit -w 6000 --maxi-batch 1000 \
         --early-stopping 10 --cost-type=ce-mean-words \
         --valid-freq 5000 --save-freq 5000 --disp-freq 500 \
@@ -100,10 +100,10 @@ do
         | sed 's/\@\@ //g' \
         | ../tools/moses-scripts/scripts/recaser/detruecase.perl \
         | ../tools/moses-scripts/scripts/tokenizer/detokenizer.perl -l de \
-        > data/$prefix.de.output
+        > data/$prefix.uk.output
 done
 
 # calculate bleu scores on test sets
-LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt14 -l en-de < data/test2014.de.output
-LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt15 -l en-de < data/test2015.de.output
-LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt16 -l en-de < data/test2016.de.output
+LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt14 -l en-de < data/test2014.uk.output
+LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt15 -l en-de < data/test2015.uk.output
+LC_ALL=C.UTF-8 ../tools/sacreBLEU/sacrebleu.py -t wmt16 -l en-de < data/test2016.uk.output
