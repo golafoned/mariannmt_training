@@ -43,8 +43,8 @@ mkdir -p model
 # preprocess data
 if [ ! -e "data/corpus.bpe.en" ]
 then
-    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt22 -l en-uk --echo src > data/valid_wmt22.en
-    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt22 -l en-uk --echo ref > data/valid_wmt22.uk
+    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt22 -l en-uk --echo src > data/valid.en
+    LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt22 -l en-uk --echo ref > data/valid.uk
 
 
     LC_ALL=C.UTF-8 python3 -m sacrebleu -t wmt22 -l en-uk --echo src > data/test2022.en
